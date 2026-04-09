@@ -1,6 +1,7 @@
 package br.com.carstore.controller;
 
 import br.com.carstore.dto.CarDTO;
+import br.com.carstore.service.CarService;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,6 +11,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class CarController {
+
+    private final CarService service;
+
+    public CarController(CarService service) {
+        this.service = service;
+    }
 
     @GetMapping("/index")
     public String exibirFormulario(Model model) {
@@ -23,8 +30,8 @@ public class CarController {
             return "index"; // Em caso de erro, retorna ao formulário com as mensagens
         }
 
-        // Se a validação for bem-sucedida, você pode processar os dados
-        System.out.println("Carro validado com sucesso: " + carDTO.getName() + ", " + carDTO.getColor());
+        // Salvar o carro usando o serviço
+        service.save(carDTO);
 
         return "redirect:/sucesso";
     }
